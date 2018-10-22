@@ -25,8 +25,11 @@ extern crate serde_derive;
 extern crate util;
 
 mod bft_proof;
+mod authority_round_proof;
+
 
 pub use bft_proof::BftProof;
+pub use authority_round_proof::AuthorityRoundProof;
 use libproto::blockchain::{Proof, ProofType};
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
