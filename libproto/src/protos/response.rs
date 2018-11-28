@@ -365,6 +365,7 @@ pub enum Response_oneof_data {
     state_proof(::std::vec::Vec<u8>),
     block_header(::std::vec::Vec<u8>),
     estimate_gas(::std::vec::Vec<u8>),
+    gas_price(::std::vec::Vec<u8>),
 }
 
 impl Response {
@@ -1395,6 +1396,55 @@ impl Response {
             _ => &[],
         }
     }
+
+    // bytes gas_price = 26;
+
+    pub fn clear_gas_price(&mut self) {
+        self.data = ::std::option::Option::None;
+    }
+
+    pub fn has_gas_price(&self) -> bool {
+        match self.data {
+            ::std::option::Option::Some(Response_oneof_data::gas_price(..)) => true,
+            _ => false,
+        }
+    }
+
+    // Param is passed by value, moved
+    pub fn set_gas_price(&mut self, v: ::std::vec::Vec<u8>) {
+        self.data = ::std::option::Option::Some(Response_oneof_data::gas_price(v))
+    }
+
+    // Mutable pointer to the field.
+    pub fn mut_gas_price(&mut self) -> &mut ::std::vec::Vec<u8> {
+        if let ::std::option::Option::Some(Response_oneof_data::gas_price(_)) = self.data {
+        } else {
+            self.data = ::std::option::Option::Some(Response_oneof_data::gas_price(::std::vec::Vec::new()));
+        }
+        match self.data {
+            ::std::option::Option::Some(Response_oneof_data::gas_price(ref mut v)) => v,
+            _ => panic!(),
+        }
+    }
+
+    // Take field
+    pub fn take_gas_price(&mut self) -> ::std::vec::Vec<u8> {
+        if self.has_gas_price() {
+            match self.data.take() {
+                ::std::option::Option::Some(Response_oneof_data::gas_price(v)) => v,
+                _ => panic!(),
+            }
+        } else {
+            ::std::vec::Vec::new()
+        }
+    }
+
+    pub fn get_gas_price(&self) -> &[u8] {
+        match self.data {
+            ::std::option::Option::Some(Response_oneof_data::gas_price(ref v)) => v,
+            _ => &[],
+        }
+    }
 }
 
 impl ::protobuf::Message for Response {
@@ -1559,6 +1609,12 @@ impl ::protobuf::Message for Response {
                     }
                     self.data = ::std::option::Option::Some(Response_oneof_data::estimate_gas(is.read_bytes()?));
                 },
+                26 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeLengthDelimited {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    self.data = ::std::option::Option::Some(Response_oneof_data::gas_price(is.read_bytes()?));
+                },
                 _ => {
                     ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
                 },
@@ -1649,6 +1705,9 @@ impl ::protobuf::Message for Response {
                 &Response_oneof_data::estimate_gas(ref v) => {
                     my_size += ::protobuf::rt::bytes_size(25, &v);
                 },
+                &Response_oneof_data::gas_price(ref v) => {
+                    my_size += ::protobuf::rt::bytes_size(26, &v);
+                },
             };
         }
         my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
@@ -1735,6 +1794,9 @@ impl ::protobuf::Message for Response {
                 },
                 &Response_oneof_data::estimate_gas(ref v) => {
                     os.write_bytes(25, v)?;
+                },
+                &Response_oneof_data::gas_price(ref v) => {
+                    os.write_bytes(26, v)?;
                 },
             };
         }
@@ -1905,6 +1967,11 @@ impl ::protobuf::Message for Response {
                     Response::has_estimate_gas,
                     Response::get_estimate_gas,
                 ));
+                fields.push(::protobuf::reflect::accessor::make_singular_bytes_accessor::<_>(
+                    "gas_price",
+                    Response::has_gas_price,
+                    Response::get_gas_price,
+                ));
                 ::protobuf::reflect::MessageDescriptor::new::<Response>(
                     "Response",
                     fields,
@@ -1952,6 +2019,7 @@ impl ::protobuf::Clear for Response {
         self.clear_state_proof();
         self.clear_block_header();
         self.clear_estimate_gas();
+        self.clear_gas_price();
         self.unknown_fields.clear();
     }
 }
@@ -1973,7 +2041,7 @@ static file_descriptor_proto_data: &'static [u8] = b"\
     ion\x124\n\x0btransaction\x18\x01\x20\x01(\x0b2\x12.SignedTransactionR\
     \x0btransaction\x12!\n\x0cblock_number\x18\x02\x20\x01(\x04R\x0bblockNum\
     ber\x12\x1d\n\nblock_hash\x18\x03\x20\x01(\x0cR\tblockHash\x12\x14\n\x05\
-    index\x18\x04\x20\x01(\rR\x05index\"\xd7\x06\n\x08Response\x12\x1d\n\nre\
+    index\x18\x04\x20\x01(\rR\x05index\"\xf6\x06\n\x08Response\x12\x1d\n\nre\
     quest_id\x18\x01\x20\x01(\x0cR\trequestId\x12\x12\n\x04code\x18\x02\x20\
     \x01(\x03R\x04code\x12\x1d\n\terror_msg\x18\x03\x20\x01(\tH\0R\x08errorM\
     sg\x12\x1b\n\x08tx_state\x18\x04\x20\x01(\tH\0R\x07txState\x12#\n\x0cblo\
@@ -1994,16 +2062,17 @@ static file_descriptor_proto_data: &'static [u8] = b"\
     Data\x12\x1a\n\x07balance\x18\x16\x20\x01(\x0cH\0R\x07balance\x12!\n\x0b\
     state_proof\x18\x17\x20\x01(\x0cH\0R\nstateProof\x12#\n\x0cblock_header\
     \x18\x18\x20\x01(\x0cH\0R\x0bblockHeader\x12#\n\x0cestimate_gas\x18\x19\
-    \x20\x01(\x0cH\0R\x0bestimateGasB\x06\n\x04dataJ\xa4\x0e\n\x06\x12\x04\0\
-    \0*\x01\n\x08\n\x01\x0c\x12\x03\0\0\x12\n\t\n\x02\x03\0\x12\x03\x02\x07\
-    \x19\n\n\n\x02\x04\0\x12\x04\x04\0\t\x01\n\n\n\x03\x04\0\x01\x12\x03\x04\
-    \x08\x17\n\x0b\n\x04\x04\0\x02\0\x12\x03\x05\x04&\n\r\n\x05\x04\0\x02\0\
-    \x04\x12\x04\x05\x04\x04\x19\n\x0c\n\x05\x04\0\x02\0\x06\x12\x03\x05\x04\
-    \x15\n\x0c\n\x05\x04\0\x02\0\x01\x12\x03\x05\x16!\n\x0c\n\x05\x04\0\x02\
-    \0\x03\x12\x03\x05$%\n\x0b\n\x04\x04\0\x02\x01\x12\x03\x06\x04\x1c\n\r\n\
-    \x05\x04\0\x02\x01\x04\x12\x04\x06\x04\x05&\n\x0c\n\x05\x04\0\x02\x01\
-    \x05\x12\x03\x06\x04\n\n\x0c\n\x05\x04\0\x02\x01\x01\x12\x03\x06\x0b\x17\
-    \n\x0c\n\x05\x04\0\x02\x01\x03\x12\x03\x06\x1a\x1b\n\x0b\n\x04\x04\0\x02\
+    \x20\x01(\x0cH\0R\x0bestimateGas\x12\x1d\n\tgas_price\x18\x1a\x20\x01(\
+    \x0cH\0R\x08gasPriceB\x06\n\x04dataJ\xdb\x0e\n\x06\x12\x04\0\0+\x01\n\
+    \x08\n\x01\x0c\x12\x03\0\0\x12\n\t\n\x02\x03\0\x12\x03\x02\x07\x19\n\n\n\
+    \x02\x04\0\x12\x04\x04\0\t\x01\n\n\n\x03\x04\0\x01\x12\x03\x04\x08\x17\n\
+    \x0b\n\x04\x04\0\x02\0\x12\x03\x05\x04&\n\r\n\x05\x04\0\x02\0\x04\x12\
+    \x04\x05\x04\x04\x19\n\x0c\n\x05\x04\0\x02\0\x06\x12\x03\x05\x04\x15\n\
+    \x0c\n\x05\x04\0\x02\0\x01\x12\x03\x05\x16!\n\x0c\n\x05\x04\0\x02\0\x03\
+    \x12\x03\x05$%\n\x0b\n\x04\x04\0\x02\x01\x12\x03\x06\x04\x1c\n\r\n\x05\
+    \x04\0\x02\x01\x04\x12\x04\x06\x04\x05&\n\x0c\n\x05\x04\0\x02\x01\x05\
+    \x12\x03\x06\x04\n\n\x0c\n\x05\x04\0\x02\x01\x01\x12\x03\x06\x0b\x17\n\
+    \x0c\n\x05\x04\0\x02\x01\x03\x12\x03\x06\x1a\x1b\n\x0b\n\x04\x04\0\x02\
     \x02\x12\x03\x07\x04\x19\n\r\n\x05\x04\0\x02\x02\x04\x12\x04\x07\x04\x06\
     \x1c\n\x0c\n\x05\x04\0\x02\x02\x05\x12\x03\x07\x04\t\n\x0c\n\x05\x04\0\
     \x02\x02\x01\x12\x03\x07\n\x14\n\x0c\n\x05\x04\0\x02\x02\x03\x12\x03\x07\
@@ -2011,7 +2080,7 @@ static file_descriptor_proto_data: &'static [u8] = b"\
     \x02\x03\x04\x12\x04\x08\x04\x07\x19\n\x0c\n\x05\x04\0\x02\x03\x05\x12\
     \x03\x08\x04\n\n\x0c\n\x05\x04\0\x02\x03\x01\x12\x03\x08\x0b\x10\n\x0c\n\
     \x05\x04\0\x02\x03\x03\x12\x03\x08\x13\x14\n\n\n\x02\x04\x01\x12\x04\x0c\
-    \0*\x01\n\n\n\x03\x04\x01\x01\x12\x03\x0c\x08\x10\n\x0b\n\x04\x04\x01\
+    \0+\x01\n\n\n\x03\x04\x01\x01\x12\x03\x0c\x08\x10\n\x0b\n\x04\x04\x01\
     \x02\0\x12\x03\r\x04\x19\n\r\n\x05\x04\x01\x02\0\x04\x12\x04\r\x04\x0c\
     \x12\n\x0c\n\x05\x04\x01\x02\0\x05\x12\x03\r\x04\t\n\x0c\n\x05\x04\x01\
     \x02\0\x01\x12\x03\r\n\x14\n\x0c\n\x05\x04\x01\x02\0\x03\x12\x03\r\x17\
@@ -2019,7 +2088,7 @@ static file_descriptor_proto_data: &'static [u8] = b"\
     \x02\x01\x04\x12\x04\x0e\x04\r\x19\n\x0c\n\x05\x04\x01\x02\x01\x05\x12\
     \x03\x0e\x04\t\n\x0c\n\x05\x04\x01\x02\x01\x01\x12\x03\x0e\n\x0e\n\x0c\n\
     \x05\x04\x01\x02\x01\x03\x12\x03\x0e\x11\x12\n\x0c\n\x04\x04\x01\x08\0\
-    \x12\x04\x0f\x04)\x05\n\x0c\n\x05\x04\x01\x08\0\x01\x12\x03\x0f\n\x0e\n\
+    \x12\x04\x0f\x04*\x05\n\x0c\n\x05\x04\x01\x08\0\x01\x12\x03\x0f\n\x0e\n\
     \x0b\n\x04\x04\x01\x02\x02\x12\x03\x10\x08\x1d\n\x0c\n\x05\x04\x01\x02\
     \x02\x05\x12\x03\x10\x08\x0e\n\x0c\n\x05\x04\x01\x02\x02\x01\x12\x03\x10\
     \x0f\x18\n\x0c\n\x05\x04\x01\x02\x02\x03\x12\x03\x10\x1b\x1c\n\x0b\n\x04\
@@ -2084,8 +2153,10 @@ static file_descriptor_proto_data: &'static [u8] = b"\
     \x05\x04\x01\x02\x17\x01\x12\x03'\x0e\x1a\n\x0c\n\x05\x04\x01\x02\x17\
     \x03\x12\x03'\x1d\x1f\n\x0b\n\x04\x04\x01\x02\x18\x12\x03(\x08\x20\n\x0c\
     \n\x05\x04\x01\x02\x18\x05\x12\x03(\x08\r\n\x0c\n\x05\x04\x01\x02\x18\
-    \x01\x12\x03(\x0e\x1a\n\x0c\n\x05\x04\x01\x02\x18\x03\x12\x03(\x1d\x1fb\
-    \x06proto3\
+    \x01\x12\x03(\x0e\x1a\n\x0c\n\x05\x04\x01\x02\x18\x03\x12\x03(\x1d\x1f\n\
+    \x0b\n\x04\x04\x01\x02\x19\x12\x03)\x08\x1d\n\x0c\n\x05\x04\x01\x02\x19\
+    \x05\x12\x03)\x08\r\n\x0c\n\x05\x04\x01\x02\x19\x01\x12\x03)\x0e\x17\n\
+    \x0c\n\x05\x04\x01\x02\x19\x03\x12\x03)\x1a\x1cb\x06proto3\
 ";
 
 static mut file_descriptor_proto_lazy: ::protobuf::lazy::Lazy<::protobuf::descriptor::FileDescriptorProto> = ::protobuf::lazy::Lazy {

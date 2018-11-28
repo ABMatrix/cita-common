@@ -37,7 +37,7 @@ use super::request::{
     GetTransactionCountParams, GetTransactionParams, GetTransactionProofParams,
     GetTransactionReceiptParams, NewBlockFilterParams, NewFilterParams, PeerCountParams,
     SendRawTransactionParams, SendTransactionParams, UninstallFilterParams,
-    EstimateParams,
+    EstimateParams, GasPriceParams,
 };
 use error::Error;
 use rpctypes::{BlockParamsByHash, BlockParamsByNumber, CountOrCode};
@@ -374,3 +374,11 @@ impl TryInto<ProtoRequest> for GetBlockHeaderParams {
     }
 }
 
+impl TryInto<ProtoRequest> for GasPriceParams {
+    type Error = Error;
+    fn try_into(self) -> Result<ProtoRequest, Self::Error> {
+        let mut request = create_request();
+        request.set_gas_price(true);
+        Ok(request)
+    }
+}

@@ -179,6 +179,9 @@ impl Output {
                     Response_oneof_data::estimate_gas(gas) => success
                         .set_result(ResponseResult::EstimateGas(gas.into()))
                         .output(),
+                    Response_oneof_data::gas_price(price) => success
+                        .set_result(ResponseResult::GasPrice(price.into()))
+                        .output(),
                 }
             } else {
                 match response {

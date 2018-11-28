@@ -301,4 +301,5 @@ define_call!(
     (GetStateProof, GetStateProofParams: [Data20, Data32, BlockNumber], Data),
     (GetBlockHeader, GetBlockHeaderParams: [BlockNumber], Data),
     (EstimateGas, EstimateParams: [EstimateRequest, BlockNumber], Quantity),
+    (GasPrice, GasPriceParams: [], Quantity),
 );
