@@ -26,6 +26,7 @@ use error::Error;
 use rpctypes::{Block, FilterChanges, Log, MetaData, Receipt, RpcTransaction, TxResponse};
 use rpctypes::{
     BlockNumber, Boolean, CallRequest, Data, Data20, Data32, Filter, OneItemTupleTrick, Quantity,
+    EstimateRequest,
 };
 use rpctypes::{Id, Params as PartialParams, Version};
 
@@ -299,4 +300,5 @@ define_call!(
     (GetMetaData, GetMetaDataParams: [BlockNumber], MetaData),
     (GetStateProof, GetStateProofParams: [Data20, Data32, BlockNumber], Data),
     (GetBlockHeader, GetBlockHeaderParams: [BlockNumber], Data),
+    (EstimateGas, EstimateParams: [EstimateRequest, BlockNumber], Quantity),
 );

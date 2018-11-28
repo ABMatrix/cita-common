@@ -28,6 +28,7 @@ mod receipt;
 mod specs;
 mod transaction;
 mod tx_response;
+mod estimate;
 
 #[cfg(test)]
 mod tests;
@@ -49,6 +50,7 @@ pub use self::proof::{BftProof, Proof};
 pub use self::receipt::Receipt;
 pub use self::transaction::{BlockTransaction, FullTransaction, RpcTransaction, Transaction};
 pub use self::tx_response::TxResponse;
+pub use self::estimate::EstimateRequest;
 
 use serde_json;
 

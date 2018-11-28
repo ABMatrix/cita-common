@@ -26,6 +26,7 @@ use cita_types::clean_0x;
 use cita_types::traits::LowerHex;
 use libproto::request::{
     Call as ProtoCall, Request as ProtoRequest, StateProof as ProtoStateProof,
+    Estimate as ProtoEstimate,
 };
 use libproto::UnverifiedTransaction;
 
@@ -36,6 +37,7 @@ use super::request::{
     GetTransactionCountParams, GetTransactionParams, GetTransactionProofParams,
     GetTransactionReceiptParams, NewBlockFilterParams, NewFilterParams, PeerCountParams,
     SendRawTransactionParams, SendTransactionParams, UninstallFilterParams,
+    EstimateParams,
 };
 use error::Error;
 use rpctypes::{BlockParamsByHash, BlockParamsByNumber, CountOrCode};
@@ -188,6 +190,25 @@ impl TryInto<ProtoRequest> for CallParams {
             .map(|height| {
                 call.set_height(height);
                 request.set_call(call);
+                request
+            })
+    }
+}
+
+impl TryInto<ProtoRequest> for EstimateParams {
+    type Error = Error;
+    fn try_into(self) -> Result<ProtoRequest, Self::Error> {
+        let mut request = create_request();
+        let mut estimate = ProtoEstimate::new();
+        estimate.set_from(self.0.from.unwrap_or_default().into());
+        estimate.set_to(self.0.to.unwrap_or_default().into());
+        estimate.set_value(self.0.value.unwrap_or_default().into());
+        estimate.set_data(self.0.data.unwrap_or_default().into());
+        serde_json::to_string(&self.1)
+            .map_err(|err| Error::invalid_params(err.to_string()))
+            .map(|height| {
+                estimate.set_height(height);
+                request.set_estimate_gas(estimate);
                 request
             })
     }
@@ -352,3 +373,4 @@ impl TryInto<ProtoRequest> for GetBlockHeaderParams {
             })
     }
 }
+

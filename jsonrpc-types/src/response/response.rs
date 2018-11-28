@@ -176,6 +176,9 @@ impl Output {
                     Response_oneof_data::block_header(data) => success
                         .set_result(ResponseResult::GetBlockHeader(data.into()))
                         .output(),
+                    Response_oneof_data::estimate_gas(gas) => success
+                        .set_result(ResponseResult::EstimateGas(gas.into()))
+                        .output(),
                 }
             } else {
                 match response {
