@@ -41,7 +41,7 @@ mod tests {
             )),
         )];
         for (data, expected_opt) in testdata.into_iter() {
-            let result: Result<EstimateRequest, serde_json::Error> = serde_json::from_str(&data);
+            let result: Result<CallRequest, serde_json::Error> = serde_json::from_str(&data);
             if let Some(expected) = expected_opt {
                 assert_eq!(result.unwrap(), expected);
             } else {

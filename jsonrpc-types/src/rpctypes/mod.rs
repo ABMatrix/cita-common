@@ -29,6 +29,7 @@ mod specs;
 mod transaction;
 mod tx_response;
 mod estimate;
+mod peer;
 
 #[cfg(test)]
 mod tests;
@@ -51,6 +52,7 @@ pub use self::receipt::Receipt;
 pub use self::transaction::{BlockTransaction, FullTransaction, RpcTransaction, Transaction};
 pub use self::tx_response::TxResponse;
 pub use self::estimate::EstimateRequest;
+pub use self::peer::{Peer, Peers};
 
 use serde_json;
 

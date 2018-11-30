@@ -18,7 +18,8 @@
 use error::Error;
 use libproto::response::{Response, Response_oneof_data};
 use request::{RequestInfo, ResponseResult};
-use rpctypes::{FilterChanges, Id, Log, MetaData, Receipt, RpcBlock, RpcTransaction, Version};
+use rpctypes::{FilterChanges, Id, Log, MetaData, Receipt, RpcBlock, RpcTransaction, Version, Peer,
+    Peers};
 use serde::de::Error as SError;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use serde_json;
@@ -182,6 +183,13 @@ impl Output {
                     Response_oneof_data::gas_price(price) => success
                         .set_result(ResponseResult::GasPrice(price.into()))
                         .output(),
+                    Response_oneof_data::peers(ps) => serde_json::from_str::<Peers>(&ps)
+                        .map(|pss| {
+                            success
+                                .set_result(ResponseResult::GetPeers(pss))
+                                .output()
+                        })
+                        .unwrap_or_else(|_| Output::system_error(0)),
                 }
             } else {
                 match response {
