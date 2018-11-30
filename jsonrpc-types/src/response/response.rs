@@ -190,6 +190,9 @@ impl Output {
                                 .output()
                         })
                         .unwrap_or_else(|_| Output::system_error(0)),
+                    Response_oneof_data::syncing(sync) => success
+                        .set_result(ResponseResult::Syncing(sync.into()))
+                        .output(),
                 }
             } else {
                 match response {

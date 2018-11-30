@@ -303,4 +303,5 @@ define_call!(
     (EstimateGas, EstimateParams: [EstimateRequest, BlockNumber], Quantity),
     (GasPrice, GasPriceParams: [], Quantity),
     (GetPeers, GetPeersParams: [], Peers),
+    (Syncing, SyncingParams: [], Boolean),
 );
