@@ -55,6 +55,57 @@ pub struct Receipt {
     pub error_message: Option<String>,
 }
 
+/// ReceiptEx
+#[derive(Debug, PartialEq, Clone, Serialize, Deserialize)]
+pub struct ReceiptEx {
+    /// Transaction Hash
+    #[serde(rename = "transactionHash")]
+    pub transaction_hash: Option<H256>,
+    /// Transaction index
+    #[serde(rename = "transactionIndex")]
+    pub transaction_index: Option<U256>,
+    /// Block hash
+    #[serde(rename = "blockHash")]
+    pub block_hash: Option<H256>,
+    /// Block
+    #[serde(rename = "blockNumber")]
+    pub block_number: Option<U256>,
+    /// Cumulative gas used
+    #[serde(rename = "cumulativeGasUsed")]
+    pub cumulative_gas_used: U256,
+    /// Gas used
+    #[serde(rename = "gasUsed")]
+    pub gas_used: Option<U256>,
+    /// Contract address
+    #[serde(rename = "contractAddress")]
+    pub contract_address: Option<H160>,
+    /// Logs
+    pub logs: Vec<Log>,
+    /// State Root
+    #[serde(rename = "root")]
+    pub state_root: Option<H256>,
+    /// Logs bloom
+    #[serde(rename = "logsBloom")]
+    pub logs_bloom: Bloom,
+    /// Receipt error message
+    #[serde(rename = "errorMessage")]
+    pub error_message: Option<String>,
+    /// Send value
+    pub value: Option<U256>,
+    /// Sender
+    pub from: Option<H160>,
+    /// Receiver
+    pub to: Option<H160>,
+    /// Balance of Sender
+    #[serde(rename = "fromBalance")]
+    pub from_balance: Option<U256>,
+    /// Balance of Receiver
+    #[serde(rename = "toBalance")]
+    pub to_balance: Option<U256>,
+    /// Send data
+    pub data: Option<String>,
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

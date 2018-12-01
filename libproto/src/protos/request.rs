@@ -946,6 +946,7 @@ pub enum Request_oneof_req {
     gas_price(bool),
     peers(bool),
     syncing(bool),
+    transaction_receipt_ex(::std::string::String),
 }
 
 impl Request {
@@ -2110,6 +2111,55 @@ impl Request {
             _ => false,
         }
     }
+
+    // string transaction_receipt_ex = 30;
+
+    pub fn clear_transaction_receipt_ex(&mut self) {
+        self.req = ::std::option::Option::None;
+    }
+
+    pub fn has_transaction_receipt_ex(&self) -> bool {
+        match self.req {
+            ::std::option::Option::Some(Request_oneof_req::transaction_receipt_ex(..)) => true,
+            _ => false,
+        }
+    }
+
+    // Param is passed by value, moved
+    pub fn set_transaction_receipt_ex(&mut self, v: ::std::string::String) {
+        self.req = ::std::option::Option::Some(Request_oneof_req::transaction_receipt_ex(v))
+    }
+
+    // Mutable pointer to the field.
+    pub fn mut_transaction_receipt_ex(&mut self) -> &mut ::std::string::String {
+        if let ::std::option::Option::Some(Request_oneof_req::transaction_receipt_ex(_)) = self.req {
+        } else {
+            self.req = ::std::option::Option::Some(Request_oneof_req::transaction_receipt_ex(::std::string::String::new()));
+        }
+        match self.req {
+            ::std::option::Option::Some(Request_oneof_req::transaction_receipt_ex(ref mut v)) => v,
+            _ => panic!(),
+        }
+    }
+
+    // Take field
+    pub fn take_transaction_receipt_ex(&mut self) -> ::std::string::String {
+        if self.has_transaction_receipt_ex() {
+            match self.req.take() {
+                ::std::option::Option::Some(Request_oneof_req::transaction_receipt_ex(v)) => v,
+                _ => panic!(),
+            }
+        } else {
+            ::std::string::String::new()
+        }
+    }
+
+    pub fn get_transaction_receipt_ex(&self) -> &str {
+        match self.req {
+            ::std::option::Option::Some(Request_oneof_req::transaction_receipt_ex(ref v)) => v,
+            _ => "",
+        }
+    }
 }
 
 impl ::protobuf::Message for Request {
@@ -2317,6 +2367,12 @@ impl ::protobuf::Message for Request {
                     }
                     self.req = ::std::option::Option::Some(Request_oneof_req::syncing(is.read_bool()?));
                 },
+                30 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeLengthDelimited {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    self.req = ::std::option::Option::Some(Request_oneof_req::transaction_receipt_ex(is.read_string()?));
+                },
                 _ => {
                     ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
                 },
@@ -2422,6 +2478,9 @@ impl ::protobuf::Message for Request {
                 },
                 &Request_oneof_req::syncing(v) => {
                     my_size += 3;
+                },
+                &Request_oneof_req::transaction_receipt_ex(ref v) => {
+                    my_size += ::protobuf::rt::string_size(30, &v);
                 },
             };
         }
@@ -2529,6 +2588,9 @@ impl ::protobuf::Message for Request {
                 },
                 &Request_oneof_req::syncing(v) => {
                     os.write_bool(29, v)?;
+                },
+                &Request_oneof_req::transaction_receipt_ex(ref v) => {
+                    os.write_string(30, v)?;
                 },
             };
         }
@@ -2719,6 +2781,11 @@ impl ::protobuf::Message for Request {
                     Request::has_syncing,
                     Request::get_syncing,
                 ));
+                fields.push(::protobuf::reflect::accessor::make_singular_string_accessor::<_>(
+                    "transaction_receipt_ex",
+                    Request::has_transaction_receipt_ex,
+                    Request::get_transaction_receipt_ex,
+                ));
                 ::protobuf::reflect::MessageDescriptor::new::<Request>(
                     "Request",
                     fields,
@@ -2770,6 +2837,7 @@ impl ::protobuf::Clear for Request {
         self.clear_gas_price();
         self.clear_peers();
         self.clear_syncing();
+        self.clear_transaction_receipt_ex();
         self.unknown_fields.clear();
     }
 }
@@ -3021,7 +3089,7 @@ static file_descriptor_proto_data: &'static [u8] = b"\
     \x04\x20\x01(\x0cR\x04data\x12\x16\n\x06height\x18\x05\x20\x01(\tR\x06he\
     ight\"Z\n\nStateProof\x12\x18\n\x07address\x18\x01\x20\x01(\x0cR\x07addr\
     ess\x12\x1a\n\x08position\x18\x02\x20\x01(\x0cR\x08position\x12\x16\n\
-    \x06height\x18\x03\x20\x01(\tR\x06height\"\xb7\x08\n\x07Request\x12\x1d\
+    \x06height\x18\x03\x20\x01(\tR\x06height\"\xef\x08\n\x07Request\x12\x1d\
     \n\nrequest_id\x18\x01\x20\x01(\x0cR\trequestId\x12#\n\x0cblock_number\
     \x18\x02\x20\x01(\x08H\0R\x0bblockNumber\x12$\n\rblock_by_hash\x18\x03\
     \x20\x01(\tH\0R\x0bblockByHash\x12(\n\x0fblock_by_height\x18\x04\x20\x01\
@@ -3047,12 +3115,13 @@ static file_descriptor_proto_data: &'static [u8] = b"\
     \x12.\n\x0cestimate_gas\x18\x1a\x20\x01(\x0b2\t.EstimateH\0R\x0bestimate\
     Gas\x12\x1d\n\tgas_price\x18\x1b\x20\x01(\x08H\0R\x08gasPrice\x12\x16\n\
     \x05peers\x18\x1c\x20\x01(\x08H\0R\x05peers\x12\x1a\n\x07syncing\x18\x1d\
-    \x20\x01(\x08H\0R\x07syncingB\x05\n\x03req\"@\n\x0cBatchRequest\x120\n\
-    \x0fnew_tx_requests\x18\x01\x20\x03(\x0b2\x08.RequestR\rnewTxRequests*$\
-    \n\x08BlockTag\x12\n\n\x06Latest\x10\0\x12\x0c\n\x08Earliest\x10\x01J\
-    \xcb\x16\n\x06\x12\x04\0\0D\x01\n\x08\n\x01\x0c\x12\x03\0\0\x12\n\t\n\
-    \x02\x03\0\x12\x03\x02\x07\x19\n\n\n\x02\x05\0\x12\x04\x04\0\x07\x01\n\n\
-    \n\x03\x05\0\x01\x12\x03\x04\x05\r\n\x0b\n\x04\x05\0\x02\0\x12\x03\x05\
+    \x20\x01(\x08H\0R\x07syncing\x126\n\x16transaction_receipt_ex\x18\x1e\
+    \x20\x01(\tH\0R\x14transactionReceiptExB\x05\n\x03req\"@\n\x0cBatchReque\
+    st\x120\n\x0fnew_tx_requests\x18\x01\x20\x03(\x0b2\x08.RequestR\rnewTxRe\
+    quests*$\n\x08BlockTag\x12\n\n\x06Latest\x10\0\x12\x0c\n\x08Earliest\x10\
+    \x01J\x82\x17\n\x06\x12\x04\0\0E\x01\n\x08\n\x01\x0c\x12\x03\0\0\x12\n\t\
+    \n\x02\x03\0\x12\x03\x02\x07\x19\n\n\n\x02\x05\0\x12\x04\x04\0\x07\x01\n\
+    \n\n\x03\x05\0\x01\x12\x03\x04\x05\r\n\x0b\n\x04\x05\0\x02\0\x12\x03\x05\
     \x04\x0f\n\x0c\n\x05\x05\0\x02\0\x01\x12\x03\x05\x04\n\n\x0c\n\x05\x05\0\
     \x02\0\x02\x12\x03\x05\r\x0e\n\x0b\n\x04\x05\0\x02\x01\x12\x03\x06\x04\
     \x11\n\x0c\n\x05\x05\0\x02\x01\x01\x12\x03\x06\x04\x0c\n\x0c\n\x05\x05\0\
@@ -3101,12 +3170,12 @@ static file_descriptor_proto_data: &'static [u8] = b"\
     \x02\x02\x02\x12\x03\x1b\x04\x16\n\r\n\x05\x04\x02\x02\x02\x04\x12\x04\
     \x1b\x04\x1a\x17\n\x0c\n\x05\x04\x02\x02\x02\x05\x12\x03\x1b\x04\n\n\x0c\
     \n\x05\x04\x02\x02\x02\x01\x12\x03\x1b\x0b\x11\n\x0c\n\x05\x04\x02\x02\
-    \x02\x03\x12\x03\x1b\x14\x15\n\n\n\x02\x04\x03\x12\x04\x1e\0@\x01\n\n\n\
+    \x02\x03\x12\x03\x1b\x14\x15\n\n\n\x02\x04\x03\x12\x04\x1e\0A\x01\n\n\n\
     \x03\x04\x03\x01\x12\x03\x1e\x08\x0f\n\x0b\n\x04\x04\x03\x02\0\x12\x03\
     \x1f\x04\x19\n\r\n\x05\x04\x03\x02\0\x04\x12\x04\x1f\x04\x1e\x11\n\x0c\n\
     \x05\x04\x03\x02\0\x05\x12\x03\x1f\x04\t\n\x0c\n\x05\x04\x03\x02\0\x01\
     \x12\x03\x1f\n\x14\n\x0c\n\x05\x04\x03\x02\0\x03\x12\x03\x1f\x17\x18\n\
-    \x0c\n\x04\x04\x03\x08\0\x12\x04\x20\x04?\x05\n\x0c\n\x05\x04\x03\x08\0\
+    \x0c\n\x04\x04\x03\x08\0\x12\x04\x20\x04@\x05\n\x0c\n\x05\x04\x03\x08\0\
     \x01\x12\x03\x20\n\r\n\x0b\n\x04\x04\x03\x02\x01\x12\x03!\x08\x1e\n\x0c\
     \n\x05\x04\x03\x02\x01\x05\x12\x03!\x08\x0c\n\x0c\n\x05\x04\x03\x02\x01\
     \x01\x12\x03!\r\x19\n\x0c\n\x05\x04\x03\x02\x01\x03\x12\x03!\x1c\x1d\n\
@@ -3185,11 +3254,13 @@ static file_descriptor_proto_data: &'static [u8] = b"\
     \x02\x1b\x03\x12\x03=\x15\x17\n\x0b\n\x04\x04\x03\x02\x1c\x12\x03>\x08\
     \x1a\n\x0c\n\x05\x04\x03\x02\x1c\x05\x12\x03>\x08\x0c\n\x0c\n\x05\x04\
     \x03\x02\x1c\x01\x12\x03>\r\x14\n\x0c\n\x05\x04\x03\x02\x1c\x03\x12\x03>\
-    \x17\x19\n\n\n\x02\x04\x04\x12\x04B\0D\x01\n\n\n\x03\x04\x04\x01\x12\x03\
-    B\x08\x14\n\x0b\n\x04\x04\x04\x02\0\x12\x03C\x04)\n\x0c\n\x05\x04\x04\
-    \x02\0\x04\x12\x03C\x04\x0c\n\x0c\n\x05\x04\x04\x02\0\x06\x12\x03C\r\x14\
-    \n\x0c\n\x05\x04\x04\x02\0\x01\x12\x03C\x15$\n\x0c\n\x05\x04\x04\x02\0\
-    \x03\x12\x03C'(b\x06proto3\
+    \x17\x19\n\x0b\n\x04\x04\x03\x02\x1d\x12\x03?\x08+\n\x0c\n\x05\x04\x03\
+    \x02\x1d\x05\x12\x03?\x08\x0e\n\x0c\n\x05\x04\x03\x02\x1d\x01\x12\x03?\
+    \x0f%\n\x0c\n\x05\x04\x03\x02\x1d\x03\x12\x03?(*\n\n\n\x02\x04\x04\x12\
+    \x04C\0E\x01\n\n\n\x03\x04\x04\x01\x12\x03C\x08\x14\n\x0b\n\x04\x04\x04\
+    \x02\0\x12\x03D\x04)\n\x0c\n\x05\x04\x04\x02\0\x04\x12\x03D\x04\x0c\n\
+    \x0c\n\x05\x04\x04\x02\0\x06\x12\x03D\r\x14\n\x0c\n\x05\x04\x04\x02\0\
+    \x01\x12\x03D\x15$\n\x0c\n\x05\x04\x04\x02\0\x03\x12\x03D'(b\x06proto3\
 ";
 
 static mut file_descriptor_proto_lazy: ::protobuf::lazy::Lazy<::protobuf::descriptor::FileDescriptorProto> = ::protobuf::lazy::Lazy {

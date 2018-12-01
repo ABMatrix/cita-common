@@ -37,7 +37,7 @@ use super::request::{
     GetTransactionCountParams, GetTransactionParams, GetTransactionProofParams,
     GetTransactionReceiptParams, NewBlockFilterParams, NewFilterParams, PeerCountParams,
     SendRawTransactionParams, SendTransactionParams, UninstallFilterParams,
-    EstimateParams, GasPriceParams, GetPeersParams, SyncingParams,
+    EstimateParams, GetGasPriceParams, GetPeersParams, SyncingParams, GetTransactionReceiptExParams,
 };
 use error::Error;
 use rpctypes::{BlockParamsByHash, BlockParamsByNumber, CountOrCode};
@@ -164,6 +164,15 @@ impl TryInto<ProtoRequest> for GetTransactionReceiptParams {
     fn try_into(self) -> Result<ProtoRequest, Self::Error> {
         let mut request = create_request();
         request.set_transaction_receipt(self.0.into());
+        Ok(request)
+    }
+}
+
+impl TryInto<ProtoRequest> for GetTransactionReceiptExParams {
+    type Error = Error;
+    fn try_into(self) -> Result<ProtoRequest, Self::Error> {
+        let mut request = create_request();
+        request.set_transaction_receipt_ex(serde_json::to_string(&self.0).unwrap());
         Ok(request)
     }
 }
@@ -374,7 +383,7 @@ impl TryInto<ProtoRequest> for GetBlockHeaderParams {
     }
 }
 
-impl TryInto<ProtoRequest> for GasPriceParams {
+impl TryInto<ProtoRequest> for GetGasPriceParams {
     type Error = Error;
     fn try_into(self) -> Result<ProtoRequest, Self::Error> {
         let mut request = create_request();

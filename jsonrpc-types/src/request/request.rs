@@ -23,10 +23,10 @@ use internals::construct_params;
 use libproto::request::Request as ProtoRequest;
 
 use error::Error;
-use rpctypes::{Block, FilterChanges, Log, MetaData, Receipt, RpcTransaction, TxResponse};
 use rpctypes::{
+    Block, FilterChanges, Log, MetaData, Receipt, ReceiptEx, RpcTransaction, TxResponse,
     BlockNumber, Boolean, CallRequest, Data, Data20, Data32, Filter, OneItemTupleTrick, Quantity,
-    EstimateRequest, Peer, Peers
+    EstimateRequest, Peers
 };
 use rpctypes::{Id, Params as PartialParams, Version};
 
@@ -301,7 +301,8 @@ define_call!(
     (GetStateProof, GetStateProofParams: [Data20, Data32, BlockNumber], Data),
     (GetBlockHeader, GetBlockHeaderParams: [BlockNumber], Data),
     (EstimateGas, EstimateParams: [EstimateRequest, BlockNumber], Quantity),
-    (GasPrice, GasPriceParams: [], Quantity),
+    (GetGasPrice, GetGasPriceParams: [], Quantity),
     (GetPeers, GetPeersParams: [], Peers),
     (Syncing, SyncingParams: [], Boolean),
+    (GetTransactionReceiptEx, GetTransactionReceiptExParams: [Data32], ReceiptEx),
 );

@@ -18,8 +18,10 @@
 use error::Error;
 use libproto::response::{Response, Response_oneof_data};
 use request::{RequestInfo, ResponseResult};
-use rpctypes::{FilterChanges, Id, Log, MetaData, Receipt, RpcBlock, RpcTransaction, Version, Peer,
-    Peers};
+use rpctypes::{
+    FilterChanges, Id, Log, MetaData, Receipt, RpcBlock, RpcTransaction, Version,
+    Peers, ReceiptEx,
+};
 use serde::de::Error as SError;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use serde_json;
@@ -121,6 +123,14 @@ impl Output {
                             ))
                             .output()
                     }
+                    Response_oneof_data::receipt_ex(serialized) => {
+                        success
+                            .set_result(serde_json::from_str::<ReceiptEx>(&serialized).ok().map_or(
+                                ResponseResult::Null,
+                                ResponseResult::GetTransactionReceiptEx,
+                            ))
+                            .output()
+                    }
                     Response_oneof_data::transaction_count(x) => success
                         .set_result(ResponseResult::GetTransactionCount(x.into()))
                         .output(),
@@ -181,7 +191,7 @@ impl Output {
                         .set_result(ResponseResult::EstimateGas(gas.into()))
                         .output(),
                     Response_oneof_data::gas_price(price) => success
-                        .set_result(ResponseResult::GasPrice(price.into()))
+                        .set_result(ResponseResult::GetGasPrice(price.into()))
                         .output(),
                     Response_oneof_data::peers(ps) => serde_json::from_str::<Peers>(&ps)
                         .map(|pss| {
