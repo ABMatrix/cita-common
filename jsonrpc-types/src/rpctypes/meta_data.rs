@@ -26,6 +26,9 @@ pub struct MetaData {
     /// The id of current chain
     #[serde(rename = "chainId")]
     pub chain_id: u32,
+    /// The id v1 of current chain
+    #[serde(rename = "chainIdV1")]
+    pub chain_id_v1: String,
     /// The name of current chain
     #[serde(rename = "chainName")]
     pub chain_name: String,
@@ -63,6 +66,7 @@ mod tests {
     fn metadata_serialization() {
         let value = json!({
             "chainId": 123,
+            "chainIdV1": "123",
             "chainName": "test-chain-name",
             "operator": "test-operator",
             "website": "https://www.google.com",
@@ -76,12 +80,13 @@ mod tests {
             "blockInterval": 3000,
             "tokenName": "Nervos",
             "tokenSymbol": "NOS",
-            "tokenAvatar": "https://avatars1.githubusercontent.com/u/35361817",
+            "tokenAvatar": "https://cdn.cryptape.com/icon_appchain.png",
             "version":108,
             "economicalModel": 1
         });
         let metadata = MetaData {
             chain_id: 123,
+            chain_id_v1: "123".to_owned(),
             chain_name: "test-chain-name".to_owned(),
             operator: "test-operator".to_owned(),
             website: "https://www.google.com".to_owned(),
@@ -91,13 +96,14 @@ mod tests {
                 "bc1fafd5ba5485f97e937fe574f836b275e593dd",
                 "fc788efe3fda574e21691d383e429be02c530e4c",
                 "e9deeae8b2a43675f113d11573119b9c68e5e3d8",
-            ].into_iter()
-                .map(|s| Address::from_str(s).unwrap())
-                .collect::<Vec<_>>(),
+            ]
+            .into_iter()
+            .map(|s| Address::from_str(s).unwrap())
+            .collect::<Vec<_>>(),
             block_interval: 3000,
             token_name: "Nervos".to_owned(),
             token_symbol: "NOS".to_owned(),
-            token_avatar: "https://avatars1.githubusercontent.com/u/35361817".to_owned(),
+            token_avatar: "https://cdn.cryptape.com/icon_appchain.png".to_owned(),
             version: 108,
             economical_model: EconomicalModel::Charge,
         };

@@ -906,6 +906,253 @@ impl ::protobuf::reflect::ProtobufValue for StateProof {
 }
 
 #[derive(PartialEq,Clone,Default)]
+pub struct StorageKey {
+    // message fields
+    pub address: ::std::vec::Vec<u8>,
+    pub position: ::std::vec::Vec<u8>,
+    pub height: ::std::string::String,
+    // special fields
+    unknown_fields: ::protobuf::UnknownFields,
+    cached_size: ::protobuf::CachedSize,
+}
+
+impl StorageKey {
+    pub fn new() -> StorageKey {
+        ::std::default::Default::default()
+    }
+
+    // bytes address = 1;
+
+    pub fn clear_address(&mut self) {
+        self.address.clear();
+    }
+
+    // Param is passed by value, moved
+    pub fn set_address(&mut self, v: ::std::vec::Vec<u8>) {
+        self.address = v;
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_address(&mut self) -> &mut ::std::vec::Vec<u8> {
+        &mut self.address
+    }
+
+    // Take field
+    pub fn take_address(&mut self) -> ::std::vec::Vec<u8> {
+        ::std::mem::replace(&mut self.address, ::std::vec::Vec::new())
+    }
+
+    pub fn get_address(&self) -> &[u8] {
+        &self.address
+    }
+
+    // bytes position = 2;
+
+    pub fn clear_position(&mut self) {
+        self.position.clear();
+    }
+
+    // Param is passed by value, moved
+    pub fn set_position(&mut self, v: ::std::vec::Vec<u8>) {
+        self.position = v;
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_position(&mut self) -> &mut ::std::vec::Vec<u8> {
+        &mut self.position
+    }
+
+    // Take field
+    pub fn take_position(&mut self) -> ::std::vec::Vec<u8> {
+        ::std::mem::replace(&mut self.position, ::std::vec::Vec::new())
+    }
+
+    pub fn get_position(&self) -> &[u8] {
+        &self.position
+    }
+
+    // string height = 3;
+
+    pub fn clear_height(&mut self) {
+        self.height.clear();
+    }
+
+    // Param is passed by value, moved
+    pub fn set_height(&mut self, v: ::std::string::String) {
+        self.height = v;
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_height(&mut self) -> &mut ::std::string::String {
+        &mut self.height
+    }
+
+    // Take field
+    pub fn take_height(&mut self) -> ::std::string::String {
+        ::std::mem::replace(&mut self.height, ::std::string::String::new())
+    }
+
+    pub fn get_height(&self) -> &str {
+        &self.height
+    }
+}
+
+impl ::protobuf::Message for StorageKey {
+    fn is_initialized(&self) -> bool {
+        true
+    }
+
+    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream) -> ::protobuf::ProtobufResult<()> {
+        while !is.eof()? {
+            let (field_number, wire_type) = is.read_tag_unpack()?;
+            match field_number {
+                1 => {
+                    ::protobuf::rt::read_singular_proto3_bytes_into(wire_type, is, &mut self.address)?;
+                },
+                2 => {
+                    ::protobuf::rt::read_singular_proto3_bytes_into(wire_type, is, &mut self.position)?;
+                },
+                3 => {
+                    ::protobuf::rt::read_singular_proto3_string_into(wire_type, is, &mut self.height)?;
+                },
+                _ => {
+                    ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
+                },
+            };
+        }
+        ::std::result::Result::Ok(())
+    }
+
+    // Compute sizes of nested messages
+    #[allow(unused_variables)]
+    fn compute_size(&self) -> u32 {
+        let mut my_size = 0;
+        if !self.address.is_empty() {
+            my_size += ::protobuf::rt::bytes_size(1, &self.address);
+        }
+        if !self.position.is_empty() {
+            my_size += ::protobuf::rt::bytes_size(2, &self.position);
+        }
+        if !self.height.is_empty() {
+            my_size += ::protobuf::rt::string_size(3, &self.height);
+        }
+        my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
+        self.cached_size.set(my_size);
+        my_size
+    }
+
+    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
+        if !self.address.is_empty() {
+            os.write_bytes(1, &self.address)?;
+        }
+        if !self.position.is_empty() {
+            os.write_bytes(2, &self.position)?;
+        }
+        if !self.height.is_empty() {
+            os.write_string(3, &self.height)?;
+        }
+        os.write_unknown_fields(self.get_unknown_fields())?;
+        ::std::result::Result::Ok(())
+    }
+
+    fn get_cached_size(&self) -> u32 {
+        self.cached_size.get()
+    }
+
+    fn get_unknown_fields(&self) -> &::protobuf::UnknownFields {
+        &self.unknown_fields
+    }
+
+    fn mut_unknown_fields(&mut self) -> &mut ::protobuf::UnknownFields {
+        &mut self.unknown_fields
+    }
+
+    fn as_any(&self) -> &::std::any::Any {
+        self as &::std::any::Any
+    }
+    fn as_any_mut(&mut self) -> &mut ::std::any::Any {
+        self as &mut ::std::any::Any
+    }
+    fn into_any(self: Box<Self>) -> ::std::boxed::Box<::std::any::Any> {
+        self
+    }
+
+    fn descriptor(&self) -> &'static ::protobuf::reflect::MessageDescriptor {
+        Self::descriptor_static()
+    }
+
+    fn new() -> StorageKey {
+        StorageKey::new()
+    }
+
+    fn descriptor_static() -> &'static ::protobuf::reflect::MessageDescriptor {
+        static mut descriptor: ::protobuf::lazy::Lazy<::protobuf::reflect::MessageDescriptor> = ::protobuf::lazy::Lazy {
+            lock: ::protobuf::lazy::ONCE_INIT,
+            ptr: 0 as *const ::protobuf::reflect::MessageDescriptor,
+        };
+        unsafe {
+            descriptor.get(|| {
+                let mut fields = ::std::vec::Vec::new();
+                fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeBytes>(
+                    "address",
+                    |m: &StorageKey| { &m.address },
+                    |m: &mut StorageKey| { &mut m.address },
+                ));
+                fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeBytes>(
+                    "position",
+                    |m: &StorageKey| { &m.position },
+                    |m: &mut StorageKey| { &mut m.position },
+                ));
+                fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeString>(
+                    "height",
+                    |m: &StorageKey| { &m.height },
+                    |m: &mut StorageKey| { &mut m.height },
+                ));
+                ::protobuf::reflect::MessageDescriptor::new::<StorageKey>(
+                    "StorageKey",
+                    fields,
+                    file_descriptor_proto()
+                )
+            })
+        }
+    }
+
+    fn default_instance() -> &'static StorageKey {
+        static mut instance: ::protobuf::lazy::Lazy<StorageKey> = ::protobuf::lazy::Lazy {
+            lock: ::protobuf::lazy::ONCE_INIT,
+            ptr: 0 as *const StorageKey,
+        };
+        unsafe {
+            instance.get(StorageKey::new)
+        }
+    }
+}
+
+impl ::protobuf::Clear for StorageKey {
+    fn clear(&mut self) {
+        self.clear_address();
+        self.clear_position();
+        self.clear_height();
+        self.unknown_fields.clear();
+    }
+}
+
+impl ::std::fmt::Debug for StorageKey {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        ::protobuf::text_format::fmt(self, f)
+    }
+}
+
+impl ::protobuf::reflect::ProtobufValue for StorageKey {
+    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
+        ::protobuf::reflect::ProtobufValueRef::Message(self)
+    }
+}
+
+#[derive(PartialEq,Clone,Default)]
 pub struct Request {
     // message fields
     pub request_id: ::std::vec::Vec<u8>,
@@ -947,6 +1194,7 @@ pub enum Request_oneof_req {
     peers(bool),
     syncing(bool),
     transaction_receipt_ex(::std::string::String),
+    storage_key(StorageKey),
 }
 
 impl Request {
@@ -1997,6 +2245,15 @@ impl Request {
     pub fn has_estimate_gas(&self) -> bool {
         match self.req {
             ::std::option::Option::Some(Request_oneof_req::estimate_gas(..)) => true,
+    // .StorageKey storage_key = 26;
+
+    pub fn clear_storage_key(&mut self) {
+        self.req = ::std::option::Option::None;
+    }
+
+    pub fn has_storage_key(&self) -> bool {
+        match self.req {
+            ::std::option::Option::Some(Request_oneof_req::storage_key(..)) => true,
             _ => false,
         }
     }
@@ -2014,6 +2271,18 @@ impl Request {
         }
         match self.req {
             ::std::option::Option::Some(Request_oneof_req::estimate_gas(ref mut v)) => v,
+    pub fn set_storage_key(&mut self, v: StorageKey) {
+        self.req = ::std::option::Option::Some(Request_oneof_req::storage_key(v))
+    }
+
+    // Mutable pointer to the field.
+    pub fn mut_storage_key(&mut self) -> &mut StorageKey {
+        if let ::std::option::Option::Some(Request_oneof_req::storage_key(_)) = self.req {
+        } else {
+            self.req = ::std::option::Option::Some(Request_oneof_req::storage_key(StorageKey::new()));
+        }
+        match self.req {
+            ::std::option::Option::Some(Request_oneof_req::storage_key(ref mut v)) => v,
             _ => panic!(),
         }
     }
@@ -2158,6 +2427,21 @@ impl Request {
         match self.req {
             ::std::option::Option::Some(Request_oneof_req::transaction_receipt_ex(ref v)) => v,
             _ => "",
+    pub fn take_storage_key(&mut self) -> StorageKey {
+        if self.has_storage_key() {
+            match self.req.take() {
+                ::std::option::Option::Some(Request_oneof_req::storage_key(v)) => v,
+                _ => panic!(),
+            }
+        } else {
+            StorageKey::new()
+        }
+    }
+
+    pub fn get_storage_key(&self) -> &StorageKey {
+        match self.req {
+            ::std::option::Option::Some(Request_oneof_req::storage_key(ref v)) => v,
+            _ => StorageKey::default_instance(),
         }
     }
 }
@@ -2185,6 +2469,7 @@ impl ::protobuf::Message for Request {
             }
         }
         if let Some(Request_oneof_req::estimate_gas(ref v)) = self.req {
+        if let Some(Request_oneof_req::storage_key(ref v)) = self.req {
             if !v.is_initialized() {
                 return false;
             }
@@ -3028,6 +3313,7 @@ impl ::protobuf::reflect::ProtobufValue for BatchRequest {
 pub enum BlockTag {
     Latest = 0,
     Earliest = 1,
+    Pending = 2,
 }
 
 impl ::protobuf::ProtobufEnum for BlockTag {
@@ -3039,6 +3325,7 @@ impl ::protobuf::ProtobufEnum for BlockTag {
         match value {
             0 => ::std::option::Option::Some(BlockTag::Latest),
             1 => ::std::option::Option::Some(BlockTag::Earliest),
+            2 => ::std::option::Option::Some(BlockTag::Pending),
             _ => ::std::option::Option::None
         }
     }
@@ -3047,6 +3334,7 @@ impl ::protobuf::ProtobufEnum for BlockTag {
         static values: &'static [BlockTag] = &[
             BlockTag::Latest,
             BlockTag::Earliest,
+            BlockTag::Pending,
         ];
         values
     }

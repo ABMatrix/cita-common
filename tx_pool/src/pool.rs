@@ -46,6 +46,7 @@ impl TxOrder {
 }
 
 impl Eq for TxOrder {}
+
 impl PartialEq for TxOrder {
     fn eq(&self, other: &TxOrder) -> bool {
         self.cmp(other) == Ordering::Equal
@@ -100,14 +101,12 @@ impl Pool {
         order
     }
 
-    #[allow(unused_variables)]
-    fn get_order_by_priority(&mut self, tx: &SignedTransaction) -> u64 {
-        return self.get_order();
+    fn get_order_by_priority(&mut self, _tx: &SignedTransaction) -> u64 {
+        self.get_order()
     }
 
-    #[allow(unused_variables)]
-    fn get_order_by_vip(&mut self, tx: &SignedTransaction) -> u64 {
-        return self.get_order();
+    fn get_order_by_vip(&mut self, _tx: &SignedTransaction) -> u64 {
+        self.get_order()
     }
 
     pub fn enqueue(&mut self, tx: SignedTransaction) -> bool {
@@ -153,20 +152,25 @@ impl Pool {
         self.update_order_set(txs);
     }
 
+    pub fn get(&self, hash: &H256) -> Option<&SignedTransaction> {
+        self.txs.get(hash)
+    }
+
     pub fn package(
         &mut self,
         height: u64,
-        block_gas_limit: u64,
-        account_gas_limit: AccountGasLimit,
+        block_quota_limit: u64,
+        account_quota_limit: AccountGasLimit,
         check_quota: bool,
         admin_address: Option<Address>,
+        version: u32,
     ) -> Vec<SignedTransaction> {
         let mut tx_list = Vec::new();
         let mut invalid_tx_list = Vec::new();
-        let mut n = block_gas_limit;
-        let mut gas_limit = account_gas_limit.get_common_gas_limit();
-        let mut specific_gas_limit = account_gas_limit.get_specific_gas_limit().clone();
-        let mut account_gas_used: HashMap<Address, u64> = HashMap::new();
+        let mut n = block_quota_limit;
+        let mut quota_limit = account_quota_limit.get_common_quota_limit();
+        let mut specific_quota_limit = account_quota_limit.get_specific_quota_limit().clone();
+        let mut account_quota_used: HashMap<Address, u64> = HashMap::new();
         {
             let mut iter = self.order_set.iter();
             loop {
@@ -176,18 +180,19 @@ impl Pool {
                 }
                 let hash = order.unwrap().hash;
                 let tx = self.txs.get(&hash);
-                let tx_is_valid = |signed_tx: &SignedTransaction, height: u64, address: Address| {
-                    let valid_until_block = signed_tx.get_transaction().get_valid_until_block();
-                    (valid_until_block == 0)
-                        || (height < valid_until_block
-                            && valid_until_block <= (height + BLOCKLIMIT))
+                let tx_is_valid =
+                    |signed_tx: &SignedTransaction, height: u64, address: Address, version: u32| {
+                        let valid_until_block = signed_tx.get_transaction().get_valid_until_block();
+                        let tx_version = signed_tx.get_transaction().get_version();
+                        (height < valid_until_block && valid_until_block <= (height + BLOCKLIMIT))
                             && admin_address
                                 .map(|admin| address == admin)
                                 .unwrap_or_else(|| true)
-                };
+                            && (tx_version == version)
+                    };
                 if let Some(tx) = tx {
                     let address = pubkey_to_address(&PubKey::from(tx.get_signer()));
-                    if tx_is_valid(tx, height, address) {
+                    if tx_is_valid(tx, height, address, version) {
                         let quota = tx.get_transaction_with_sig().get_transaction().quota;
                         if n <= quota {
                             if tx_list.is_empty() {
@@ -197,26 +202,26 @@ impl Pool {
                         }
 
                         if check_quota {
-                            if account_gas_used.contains_key(&address) {
-                                let value = account_gas_used.get_mut(&address).unwrap();
+                            if account_quota_used.contains_key(&address) {
+                                let value = account_quota_used.get_mut(&address).unwrap();
                                 if *value < quota {
                                     continue;
                                 }
                                 *value = *value - quota;
                             } else {
                                 if let Some(value) =
-                                    specific_gas_limit.get_mut(&address.lower_hex())
+                                    specific_quota_limit.get_mut(&address.lower_hex())
                                 {
-                                    gas_limit = *value;
+                                    quota_limit = *value;
                                 }
 
                                 let mut _remainder = 0;
-                                if quota < gas_limit {
-                                    _remainder = gas_limit - quota;
+                                if quota < quota_limit {
+                                    _remainder = quota_limit - quota;
                                 } else {
                                     _remainder = 0;
                                 }
-                                account_gas_used.insert(address, _remainder);
+                                account_quota_used.insert(address, _remainder);
                             }
                         }
                         n = n - quota;
@@ -231,6 +236,16 @@ impl Pool {
         }
         self.update(&invalid_tx_list);
         tx_list
+    }
+
+    pub fn cull(&self, txs: &[H256]) -> Vec<SignedTransaction> {
+        let mut acc = Vec::with_capacity(txs.len());
+        for tx in txs.iter() {
+            if let Some(tx) = self.txs.get(tx) {
+                acc.push(tx.clone())
+            }
+        }
+        acc
     }
 
     pub fn package_backword_compatible(&mut self, height: u64) -> Vec<SignedTransaction> {
@@ -250,11 +265,13 @@ impl Pool {
                     if tx
                         .get_transaction_with_sig()
                         .get_transaction()
-                        .valid_until_block >= height
+                        .valid_until_block
+                        >= height
                         && tx
                             .get_transaction_with_sig()
                             .get_transaction()
-                            .valid_until_block < (height + BLOCKLIMIT)
+                            .valid_until_block
+                            < (height + BLOCKLIMIT)
                     {
                         tx_list.push(tx.clone());
                         n = n - 1;
@@ -279,7 +296,6 @@ impl Pool {
     }
 }
 
-// TODO: FIXME
 #[cfg(test)]
 #[cfg(feature = "secp256k1")]
 mod tests {
@@ -291,6 +307,7 @@ mod tests {
         data: Vec<u8>,
         valid_until_block: u64,
         privkey: &PrivKey,
+        version: u32,
     ) -> SignedTransaction {
         let mut tx = Transaction::new();
         tx.set_data(data);
@@ -298,6 +315,7 @@ mod tests {
         tx.set_nonce("0".to_string());
         tx.set_valid_until_block(valid_until_block);
         tx.set_quota(184467440737095);
+        tx.set_version(version);
 
         tx.sign(*privkey)
     }
@@ -308,14 +326,14 @@ mod tests {
         let keypair = KeyPair::gen_keypair();
         let privkey = keypair.privkey();
 
-        let tx1 = generate_tx(vec![1], 99, privkey);
-        let tx2 = generate_tx(vec![1], 99, privkey);
-        let tx3 = generate_tx(vec![2], 99, privkey);
-        let tx4 = generate_tx(vec![3], 5, privkey);
+        let tx1 = generate_tx(vec![1], 99, privkey, 0);
+        let tx2 = generate_tx(vec![1], 99, privkey, 0);
+        let tx3 = generate_tx(vec![2], 99, privkey, 0);
+        let tx4 = generate_tx(vec![3], 5, privkey, 0);
 
-        let mut account_gas_limit = AccountGasLimit::new();
-        account_gas_limit.set_common_gas_limit(10000);
-        account_gas_limit.set_specific_gas_limit(HashMap::new());
+        let mut account_quota_limit = AccountGasLimit::new();
+        account_quota_limit.set_common_quota_limit(10000);
+        account_quota_limit.set_specific_quota_limit(HashMap::new());
 
         assert_eq!(p.enqueue(tx1.clone()), true);
         assert_eq!(p.enqueue(tx2.clone()), false);
@@ -325,19 +343,73 @@ mod tests {
         p.update(&vec![tx1.clone()]);
         assert_eq!(p.len(), 2);
         assert_eq!(
-            p.package(5, 30, account_gas_limit.clone(), true, None),
+            p.package(5, 30, account_quota_limit.clone(), true, None, 0),
             vec![tx3.clone()]
         );
         p.update(&vec![tx3.clone()]);
         assert_eq!(
-            p.package(4, 30, account_gas_limit.clone(), true, None),
+            p.package(4, 30, account_quota_limit.clone(), true, None, 0),
             vec![tx4]
         );
         assert_eq!(p.len(), 1);
         assert_eq!(
-            p.package(5, 30, account_gas_limit.clone(), true, None),
+            p.package(5, 30, account_quota_limit.clone(), true, None, 0),
             vec![]
         );
         assert_eq!(p.len(), 0);
+    }
+
+    #[test]
+    fn version_test() {
+        let mut p = Pool::new(1);
+        let keypair = KeyPair::gen_keypair();
+        let privkey = keypair.privkey();
+
+        let tx1 = generate_tx(vec![1], 99, privkey, 0);
+        let tx2 = generate_tx(vec![2], 99, privkey, 1);
+
+        let mut account_quota_limit = AccountGasLimit::new();
+        account_quota_limit.set_common_quota_limit(10000);
+        account_quota_limit.set_specific_quota_limit(HashMap::new());
+
+        assert_eq!(p.enqueue(tx1.clone()), true);
+        assert_eq!(p.enqueue(tx2.clone()), true);
+        assert_eq!(p.len(), 2);
+
+        assert_eq!(
+            p.package(5, 30, account_quota_limit.clone(), false, None, 0),
+            vec![tx1.clone()]
+        );
+        p.update(&vec![tx1.clone()]);
+        assert_eq!(
+            p.package(5, 30, account_quota_limit.clone(), false, None, 0),
+            vec![]
+        );
+        assert_eq!(p.len(), 0);
+    }
+
+    #[test]
+    fn test_cull() {
+        let mut p = Pool::new(1);
+
+        let keypair = KeyPair::gen_keypair();
+        let privkey = keypair.privkey();
+
+        let tx1 = generate_tx(vec![1], 99, privkey, 0);
+        let tx2 = generate_tx(vec![2], 99, privkey, 1);
+        let tx3 = generate_tx(vec![3], 99, privkey, 2);
+        let tx4 = generate_tx(vec![4], 99, privkey, 3);
+
+        assert_eq!(p.enqueue(tx1.clone()), true);
+        assert_eq!(p.enqueue(tx2.clone()), true);
+        assert_eq!(p.enqueue(tx3.clone()), true);
+        assert_eq!(p.enqueue(tx4.clone()), true);
+        assert_eq!(p.len(), 4);
+
+        let tx_hashes = vec![tx1.crypt_hash(), tx3.crypt_hash(), tx4.crypt_hash()];
+
+        let txs = p.cull(tx_hashes.as_slice());
+
+        assert_eq!(txs, vec![tx1, tx3, tx4]);
     }
 }

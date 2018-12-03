@@ -305,4 +305,5 @@ define_call!(
     (GetPeers, GetPeersParams: [], Peers),
     (Syncing, SyncingParams: [], Boolean),
     (GetTransactionReceiptEx, GetTransactionReceiptExParams: [Data32], ReceiptEx),
+    (GetStorageAt, GetStorageKeyParams: [Data20, Data32, BlockNumber], Data),
 );

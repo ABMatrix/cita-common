@@ -145,7 +145,6 @@ macro_rules! loop_macro_for_structs {
             VerifyBlockReq,
             VerifyBlockResp,
             VerifyTxReq,
-            VerifyTxResp,
             AccountGasLimit,
             BlackList,
             Block,
@@ -167,6 +166,8 @@ macro_rules! loop_macro_for_structs {
             KV,
             Log,
             InnerMessage,
+            BlockTxn,
+            GetBlockTxn,
             Proposal,
             SignedProposal,
             Vote,
@@ -188,6 +189,7 @@ macro_rules! loop_macro_for_structs {
             Estimate,
             Request,
             StateProof,
+            StorageKey,
             FullTransaction,
             Response,
             SnapshotReq,
@@ -218,7 +220,6 @@ macro_rules! loop_macro_for_structs_in_msg {
             BlockTxHashes,
             BlockTxHashesReq,
             VerifyTxReq,
-            VerifyTxResp,
             VerifyBlockReq,
             VerifyBlockResp,
             ExecutedResult,
@@ -228,6 +229,8 @@ macro_rules! loop_macro_for_structs_in_msg {
             MiscellaneousReq,
             BlackList,
             StateSignal,
+            GetBlockTxn,
+            BlockTxn,
             // Generate MSG-PROTOS struct automatically end.
         );
     };
@@ -458,12 +461,6 @@ impl Message {
             _ => None,
         }
     }
-    pub fn take_verify_tx_resp(&mut self) -> Option<VerifyTxResp> {
-        match self.take_content() {
-            Some(MsgClass::VerifyTxResp(v)) => Some(v),
-            _ => None,
-        }
-    }
     pub fn take_verify_block_req(&mut self) -> Option<VerifyBlockReq> {
         match self.take_content() {
             Some(MsgClass::VerifyBlockReq(v)) => Some(v),
@@ -515,6 +512,18 @@ impl Message {
     pub fn take_state_signal(&mut self) -> Option<StateSignal> {
         match self.take_content() {
             Some(MsgClass::StateSignal(v)) => Some(v),
+            _ => None,
+        }
+    }
+    pub fn take_get_block_txn(&mut self) -> Option<GetBlockTxn> {
+        match self.take_content() {
+            Some(MsgClass::GetBlockTxn(v)) => Some(v),
+            _ => None,
+        }
+    }
+    pub fn take_block_txn(&mut self) -> Option<BlockTxn> {
+        match self.take_content() {
+            Some(MsgClass::BlockTxn(v)) => Some(v),
             _ => None,
         }
     }
