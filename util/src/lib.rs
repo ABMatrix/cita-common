@@ -18,6 +18,7 @@
 #![allow(unused_extern_crates)]
 #![feature(custom_attribute)]
 #![allow(unused_attributes)]
+#![allow(deprecated)]
 extern crate ansi_term;
 #[cfg(feature = "blake2bhash")]
 extern crate blake2b;

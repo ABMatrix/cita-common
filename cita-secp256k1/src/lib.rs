@@ -16,6 +16,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #![allow(unused_extern_crates)]
 #![feature(test)]
+#![allow(deprecated)]
 
 #[cfg(test)]
 extern crate bincode;

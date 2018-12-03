@@ -19,6 +19,7 @@
 #![feature(concat_idents)]
 #![allow(unused_attributes)]
 #![allow(unused_extern_crates)]
+#![allow(deprecated)]
 extern crate bincode;
 extern crate cita_types;
 extern crate libproto;

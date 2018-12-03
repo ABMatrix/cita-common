@@ -16,6 +16,7 @@
 
 //! `JournalDB` interface and implementation.
 #![rustfmt_skip]
+#![allow(deprecated)]
 
 use std::{fmt, str};
 use std::sync::Arc;
