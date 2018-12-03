@@ -71,11 +71,11 @@ pub struct ReceiptEx {
     #[serde(rename = "blockNumber")]
     pub block_number: Option<U256>,
     /// Cumulative gas used
-    #[serde(rename = "cumulativeGasUsed")]
-    pub cumulative_gas_used: U256,
-    /// Gas used
-    #[serde(rename = "gasUsed")]
-    pub gas_used: Option<U256>,
+    #[serde(rename = "cumulativeQuotaUsed")]
+    pub cumulative_quota_used: U256,
+    /// quota used
+    #[serde(rename = "quotaUsed")]
+    pub quota_used: Option<U256>,
     /// Contract address
     #[serde(rename = "contractAddress")]
     pub contract_address: Option<H160>,
