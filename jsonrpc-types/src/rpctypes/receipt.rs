@@ -104,6 +104,12 @@ pub struct ReceiptEx {
     pub to_balance: Option<U256>,
     /// Send data
     pub data: Option<String>,
+    #[serde(rename = "quotaLimit")]
+    pub quota_limit: Option<U256>,
+    #[serde(rename = "quotaPrice")]
+    pub quota_price: Option<U256>,
+    #[serde(rename = "quotaCost")]
+    pub quota_cost: Option<U256>,
 }
 
 #[cfg(test)]
