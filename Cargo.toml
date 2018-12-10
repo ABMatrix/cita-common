@@ -1,0 +1,39 @@
+[workspace]
+
+members = [
+    "cita-common-benches",
+
+    "logger",
+    "error",
+    "panic_hook",
+    "worker",
+    "cita-types",
+    "util",
+
+    "pubsub_zeromq",
+    "pubsub_rabbitmq",
+    "pubsub_kafka",
+    "pubsub",
+
+    "ethcore-bloom-journal",
+    "blake2b",
+    "cita-sm2",
+    "cita-secp256k1",
+    "cita-ed25519",
+    "cita-crypto",
+
+    "rlp",
+    "rlp_derive",
+    "libproto",
+
+    "tx_pool",
+
+    "proof",
+    "engine_json",
+    "authority_manage",
+
+    "jsonrpc-types",
+    "cita-web3",
+
+    "engine",
+]
