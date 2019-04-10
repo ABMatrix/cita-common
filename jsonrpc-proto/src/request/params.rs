@@ -159,6 +159,17 @@ impl TryIntoProto<ProtoRequest> for GetTransactionReceiptParams {
     }
 }
 
+impl TryIntoProto<ProtoRequest> for GetTransactionReceiptExParams {
+    type Error = Error;
+
+    fn try_into_proto(self) -> Result<ProtoRequest, Self::Error> {
+        let mut request = create_request();
+
+        request.set_transaction_receipt_ex(serde_json::to_string(&self.0).unwrap());
+        Ok(request)
+    }
+}
+
 impl TryIntoProto<ProtoRequest> for GetLogsParams {
     type Error = Error;
 

@@ -82,6 +82,12 @@ fn serialize_and_deserialize() {
     );
 
     test_ser_and_de!(
+        GetTransactionReceiptExParams,
+        ["0x000000000000000000000000000000000000000000000000000000000000000a"],
+        (H256::from(10).into())
+    );
+
+    test_ser_and_de!(
         value,
         GetLogsParams,
         [{

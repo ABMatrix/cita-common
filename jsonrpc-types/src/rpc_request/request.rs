@@ -22,8 +22,8 @@ use internals::construct_params;
 
 use rpc_types::{
     Block, BlockNumber, Boolean, CallRequest, Data, Data20, Data32, Filter, FilterChanges, Id, Log,
-    MetaData, OneItemTupleTrick, PeersInfo, Quantity, Receipt, RpcTransaction, SoftwareVersion,
-    TxResponse, Version,
+    MetaData, OneItemTupleTrick, PeersInfo, Quantity, Receipt, ReceiptEx, RpcTransaction,
+    SoftwareVersion, TxResponse, Version,
 };
 
 pub type Logs = Vec<Log>;
@@ -229,6 +229,7 @@ macro_rules! impl_for_each_jsonrpc_requests {
             (GetBlockByHash, GetBlockByHashParams: [Data32, Boolean], Block),
             (GetBlockByNumber, GetBlockByNumberParams: [BlockNumber, Boolean], Block),
             (GetTransactionReceipt, GetTransactionReceiptParams: [Data32], Receipt),
+            (GetTransactionReceiptEx, GetTransactionReceiptExParams: [Data32], ReceiptEx),
             (GetLogs, GetLogsParams: [Filter], Logs),
             (Call, CallParams: [CallRequest, BlockNumber], Data),
             (GetTransaction, GetTransactionParams: [Data32], RpcTransaction),

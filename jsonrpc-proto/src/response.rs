@@ -19,8 +19,8 @@ use jsonrpc_types::{
     rpc_request::{RequestInfo, ResponseResult},
     rpc_response::{Output, RpcFailure, RpcSuccess},
     rpc_types::{
-        Block, FilterChanges, Log, MetaData, PeersInfo, Receipt, RpcBlock, RpcTransaction,
-        SoftwareVersion,
+        Block, FilterChanges, Log, MetaData, PeersInfo, Receipt, ReceiptEx, RpcBlock,
+        RpcTransaction, SoftwareVersion,
     },
     Error,
 };
@@ -92,6 +92,12 @@ impl OutputExt for Output {
                             ))
                             .output()
                     }
+                    Response_oneof_data::receipt_ex(serialized) => success
+                        .set_result(serde_json::from_str::<ReceiptEx>(&serialized).ok().map_or(
+                            ResponseResult::Null,
+                            ResponseResult::GetTransactionReceiptEx,
+                        ))
+                        .output(),
                     Response_oneof_data::transaction_count(x) => success
                         .set_result(ResponseResult::GetTransactionCount(x.into()))
                         .output(),

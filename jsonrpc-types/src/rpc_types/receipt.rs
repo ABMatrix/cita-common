@@ -55,6 +55,63 @@ pub struct Receipt {
     pub error_message: Option<String>,
 }
 
+/// ReceiptEx
+#[derive(Debug, PartialEq, Clone, Serialize, Deserialize)]
+pub struct ReceiptEx {
+    /// Transaction Hash
+    #[serde(rename = "transactionHash")]
+    pub transaction_hash: Option<H256>,
+    /// Transaction index
+    #[serde(rename = "transactionIndex")]
+    pub transaction_index: Option<U256>,
+    /// Block hash
+    #[serde(rename = "blockHash")]
+    pub block_hash: Option<H256>,
+    /// Block
+    #[serde(rename = "blockNumber")]
+    pub block_number: Option<U256>,
+    /// Cumulative gas used
+    #[serde(rename = "cumulativeQuotaUsed")]
+    pub cumulative_quota_used: U256,
+    /// quota used
+    #[serde(rename = "quotaUsed")]
+    pub quota_used: Option<U256>,
+    /// Contract address
+    #[serde(rename = "contractAddress")]
+    pub contract_address: Option<H160>,
+    /// Logs
+    pub logs: Vec<Log>,
+    /// State Root
+    #[serde(rename = "root")]
+    pub state_root: Option<H256>,
+    /// Logs bloom
+    #[serde(rename = "logsBloom")]
+    pub logs_bloom: Bloom,
+    /// Receipt error message
+    #[serde(rename = "errorMessage")]
+    pub error_message: Option<String>,
+    /// Send value
+    pub value: Option<U256>,
+    /// Sender
+    pub from: Option<H160>,
+    /// Receiver
+    pub to: Option<H160>,
+    /// Balance of Sender
+    #[serde(rename = "fromBalance")]
+    pub from_balance: Option<U256>,
+    /// Balance of Receiver
+    #[serde(rename = "toBalance")]
+    pub to_balance: Option<U256>,
+    /// Send data
+    pub data: Option<String>,
+    #[serde(rename = "quotaLimit")]
+    pub quota_limit: Option<U256>,
+    #[serde(rename = "quotaPrice")]
+    pub quota_price: Option<U256>,
+    #[serde(rename = "quotaCost")]
+    pub quota_cost: Option<U256>,
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
