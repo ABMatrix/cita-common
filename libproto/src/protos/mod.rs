@@ -54,7 +54,7 @@ pub use self::communication::{InnerMessage_oneof_content, InnerMessage};
 pub use self::compact_block::{BlockTxn, GetBlockTxn};
 pub use self::consensus::{CompactProposal, CompactSignedProposal, Proposal, SignedProposal, Vote};
 pub use self::executor::{ReceiptError, ConsensusConfig, ExecutedHeader, ExecutedInfo, ExecutedResult, LoadRequest, LoadResponse, LogEntry, Receipt, ReceiptErrorWithOption, ReceiptWithOption, RegisterRequest, RegisterResponse, StateRoot};
-pub use self::request::{BlockTag, Request_oneof_req, BatchRequest, Call, Request, StateProof, StorageKey};
+pub use self::request::{BlockTag, Request_oneof_req, BatchRequest, Call, Estimate, Request, StateProof, StorageKey};
 pub use self::response::{Response_oneof_data, FullTransaction, Response};
 pub use self::snapshot::{Cmd, Resp, SnapshotReq, SnapshotResp};
 pub use self::sync::{SyncRequest, SyncResponse};

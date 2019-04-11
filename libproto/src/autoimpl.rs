@@ -203,6 +203,7 @@ macro_rules! loop_macro_for_structs {
             StateRoot,
             BatchRequest,
             Call,
+            Estimate,
             Request,
             StateProof,
             StorageKey,

@@ -18,7 +18,7 @@
 use cita_types::{clean_0x, traits::LowerHex};
 use jsonrpc_types::{
     rpc_request::*, // bring in varied Params
-    rpc_types::{BlockParamsByHash, BlockParamsByNumber, CountOrCode},
+    rpc_types::{BlockParamsByHash, BlockParamsByNumber, CountOrCode, EstimateRequest},
     Error,
 };
 use libproto::{request::Request as ProtoRequest, UnverifiedTransaction};
@@ -46,6 +46,25 @@ impl TryIntoProto<ProtoRequest> for BlockNumberParams {
 
         request.set_block_number(true);
         Ok(request)
+    }
+}
+
+impl TryIntoProto<ProtoRequest> for EstimateParams {
+    type Error = Error;
+    fn try_into_proto(self) -> Result<ProtoRequest, Self::Error> {
+        let mut request = create_request();
+        let mut estimate = libproto::Estimate::new();
+        estimate.set_from(self.0.from.unwrap_or_default().into());
+        estimate.set_to(self.0.to.unwrap_or_default().into());
+        estimate.set_value(self.0.value.unwrap_or_default().into());
+        estimate.set_data(self.0.data.unwrap_or_default().into());
+        serde_json::to_string(&self.1)
+            .map_err(|err| Error::invalid_params(err.to_string()))
+            .map(|height| {
+                estimate.set_height(height);
+                request.set_estimate_gas(estimate);
+                request
+            })
     }
 }
 

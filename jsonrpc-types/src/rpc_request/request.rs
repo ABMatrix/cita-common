@@ -21,9 +21,9 @@ use serde_json;
 use internals::construct_params;
 
 use rpc_types::{
-    Block, BlockNumber, Boolean, CallRequest, Data, Data20, Data32, Filter, FilterChanges, Id, Log,
-    MetaData, OneItemTupleTrick, PeersInfo, Quantity, Receipt, ReceiptEx, RpcTransaction,
-    SoftwareVersion, TxResponse, Version,
+    Block, BlockNumber, Boolean, CallRequest, Data, Data20, Data32, EstimateRequest, Filter,
+    FilterChanges, Id, Log, MetaData, OneItemTupleTrick, PeersInfo, Quantity, Receipt, ReceiptEx,
+    RpcTransaction, SoftwareVersion, TxResponse, Version,
 };
 
 pub type Logs = Vec<Log>;
@@ -223,6 +223,7 @@ macro_rules! impl_for_each_jsonrpc_requests {
     ($macro:ident) => {
         $macro!(
             (BlockNumber, BlockNumberParams: [], Quantity),
+            (EstimateGas, EstimateParams: [EstimateRequest, BlockNumber], Quantity),
             (PeerCount, PeerCountParams: [], Quantity),
             (SendRawTransaction, SendRawTransactionParams: [Data], TxResponse),
             (SendTransaction, SendTransactionParams: [Data], TxResponse),
