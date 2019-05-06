@@ -1,4 +1,4 @@
 [submodule "libproto/proto"]
 	path = libproto/proto
-	url = http://47.96.116.162:10080/kay/cita-proto.git
+	url = https://github.com/ABMatrix/cita-proto.git
 
