@@ -1,4 +1,4 @@
-use rpc_types::{Data, Data20, Data32};
+use rpc_types::{Data, Data20, Quantity};
 
 #[derive(Serialize, Deserialize, Debug, Clone, Hash, PartialEq, Eq)]
 pub struct EstimateRequest {
@@ -7,7 +7,7 @@ pub struct EstimateRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub to: Option<Data20>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub value: Option<Data32>,
+    pub value: Option<Quantity>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data: Option<Data>,
 }
@@ -16,7 +16,7 @@ impl EstimateRequest {
     pub fn new(
         from: Option<Data20>,
         to: Option<Data20>,
-        value: Option<Data32>,
+        value: Option<Quantity>,
         data: Option<Data>,
     ) -> Self {
         EstimateRequest {
@@ -31,7 +31,7 @@ impl EstimateRequest {
 #[cfg(test)]
 mod tests {
     use super::EstimateRequest;
-    use cita_types::{H160, H256};
+    use cita_types::{H160, U256};
     use serde_json;
 
     #[test]
@@ -40,23 +40,23 @@ mod tests {
             json!({
                 "from": "0x0000000000000000000000000000000000000001",
                 "to": "0x0000000000000000000000000000000000000002",
-                "value" : "";
+                "value" : "0xabcdef123",
                 "data": "0xabcdef"
             })
             .to_string(),
             Some(EstimateRequest::new(
                 Some(H160::from(1).into()),
                 Some(H160::from(2).into()),
-                Some(H256::form(3).into()),
+                Some(U256::from(0xabcdef123u64).into()),
                 Some(vec![0xab, 0xcd, 0xef].into()),
             )),
         )];
         for (data, expected_opt) in testdata.into_iter() {
-            let result: Result<CallRequest, serde_json::Error> = serde_json::from_str(&data);
+            let result: Result<EstimateRequest, serde_json::Error> = serde_json::from_str(&data);
             if let Some(expected) = expected_opt {
-                assert_eq!(result.unwrap(), expected);
+                assert_eq!(result.ok().unwrap(), expected)
             } else {
-                assert!(result.is_err());
+                assert!(false)
             }
         }
     }

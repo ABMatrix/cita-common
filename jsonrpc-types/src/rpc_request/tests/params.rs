@@ -21,8 +21,9 @@ use rpc_request::{
     GetBlockByNumberParams, GetBlockHeaderParams, GetCodeParams, GetFilterChangesParams,
     GetFilterLogsParams, GetLogsParams, GetMetaDataParams, GetStateProofParams,
     GetTransactionCountParams, GetTransactionParams, GetTransactionProofParams,
-    GetTransactionReceiptParams, GetVersionParams, NewBlockFilterParams, NewFilterParams,
-    PeerCountParams, PeersInfoParams, SendRawTransactionParams, UninstallFilterParams,
+    GetTransactionReceiptParams, GetTransactionReceiptExParams, GetVersionParams,
+    NewBlockFilterParams, NewFilterParams, PeerCountParams, PeersInfoParams,
+    SendRawTransactionParams, UninstallFilterParams,
 };
 use rpc_types::{BlockNumber, CallRequest, Filter, VariadicValue};
 use serde_json;
