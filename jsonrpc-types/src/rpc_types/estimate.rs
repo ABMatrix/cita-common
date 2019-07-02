@@ -1,4 +1,4 @@
-use rpc_types::{Data, Data20, Quantity};
+use crate::rpc_types::{Data, Data20, Quantity};
 
 #[derive(Serialize, Deserialize, Debug, Clone, Hash, PartialEq, Eq)]
 pub struct EstimateRequest {
