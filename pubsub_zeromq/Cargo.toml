@@ -2,6 +2,7 @@
 name = "pubsub_zeromq"
 version = "0.1.0"
 authors = ["Cryptape Technologies <contact@cryptape.com>"]
+edition = "2018"
 
 [dependencies.zmq]
 version = "0.8"
@@ -9,5 +10,5 @@ default-features = false
 features = []
 
 [dependencies]
-logger = { path = "../logger" }
+cita-logger = "0.1.0"
 crossbeam-channel = "0.3.8"

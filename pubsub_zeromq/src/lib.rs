@@ -1,5 +1,5 @@
 // CITA
-// Copyright 2016-2017 Cryptape Technologies LLC.
+// Copyright 2016-2019 Cryptape Technologies LLC.
 
 // This program is free software: you can redistribute it
 // and/or modify it under the terms of the GNU General Public
@@ -16,11 +16,11 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #[macro_use]
-extern crate logger;
+extern crate cita_logger as logger;
 pub extern crate crossbeam_channel as channel;
 extern crate zmq;
-use channel::Receiver;
-use channel::Sender;
+use crate::channel::Receiver;
+use crate::channel::Sender;
 use std::thread;
 
 pub fn start_zeromq(

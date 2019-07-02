@@ -2,7 +2,8 @@
 name = "panic_hook"
 version = "0.0.1"
 authors = ["Cryptape Technologies <contact@cryptape.com>"]
+edition = "2018"
 
 [dependencies]
 backtrace = "0.3"
-logger = { path = "../logger" }
+cita-logger = "0.1.0"
