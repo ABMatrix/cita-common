@@ -47,7 +47,7 @@ pub mod response;
 pub mod snapshot;
 pub mod sync;
 
-pub use self::auth::{BlockTxHashes, BlockTxHashesReq, Miscellaneous, MiscellaneousReq, VerifyBlockReq, VerifyBlockResp, VerifyTxReq};
+pub use self::auth::{BalanceVerifyReq, BalanceVerifyRes, BalanceVerifyResult, BalanceVerifyTransaction, BlockTxHashes, BlockTxHashesReq, Miscellaneous, MiscellaneousReq, VerifyBlockReq, VerifyBlockResp, VerifyTxReq};
 pub use self::blockchain::{Crypto, ProofType, AccountGasLimit, BlackList, Block, BlockBody, BlockHeader, BlockTxs, BlockWithProof, CompactBlock, CompactBlockBody, Proof, RichStatus, SignedTransaction, StateSignal, Status, Transaction, UnverifiedTransaction};
 pub use self::citacode::{ActionParams, EnvInfo, InvokeRequest, InvokeResponse, KV, Log};
 pub use self::communication::{InnerMessage_oneof_content, InnerMessage};
